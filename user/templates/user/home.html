@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block home %}
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Домой</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin">Админка</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="/admin/user/film/add/">Добавить фильм в БД</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="api/films/">API</a>
+        </li>
+        {% if not user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link"href="signin">Войти</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link disabled" href="logout">Выйти</a>
+        </li>
+        {% endif %}
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+          <a class="nav-link disabled"href="signin">Войти</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="logout">Выйти</a>
+        </li>
+        {% endif %}
+      </ul>
+      <form action="https://www.kinopoisk.ru/index.php?">
+        <input type="text" id="fname" name="kp_query" placeholder="КиноПоиск" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Поиск</button>
+      </form>
+    </div>
+  </div>
+</nav>
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <form method="GET" action="">
+      <div class="mb-3">
+            {{ form.as_p }}
+      </div>
+    <button type="submit" class="btn btn-primary">Выбрать</button>
+</form>
+    </div>
+</div>
+{% for object in object_list %}
+<div class="card mb-3 mx-auto" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="media/{{ object.film_poster }}" class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title"><a href="{{ object.url }}">{{ object.film_name }}</a></h5>
+        <p class="card-text">{{ object.description }}</p>
+        <p class="card-text">Год выпуска: {{ object.release_year }}</p>
+        <p class="card-text"><small class="text-muted">В главных ролях: <br>{% for actor in object.actors_in_film.all %}{{ actor.staff_name}}<br>{% endfor %}</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+</form>
+</div>
+  </div>
+{% endblock %}
